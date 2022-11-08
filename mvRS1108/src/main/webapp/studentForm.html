@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Student RS</title>
+<script src="js/jquery3.6.0.js"></script>
+</head>
+<body>
+
+		First Name: <input type="text" id="fn" value="George" /><br>
+		Last Name: <input type="text" id="ln" value="Lin" /><br>
+		School: <input type="text" id="sh" value="Big Stone" /><br>
+		Standard: <input type="text" id="std" value="5" /><br>
+		RollNumber: <input type="text" id="rn" value="3" /><br>
+		<button id="send">SEND</button>
+		<button id="query">QUERY</button>
+		<br>
+		
+		<div id="dis"></div>
+
+<script>
+	function rs(data) {
+		$("#dis").html(JSON.stringify(data));
+	}
+	function query() {
+		$.get("api/student/get", rs);
+	}
+	function send() {
+		var obj = {};
+		obj.firstName = $("#fn").val();
+		obj.lastName = $("#ln").val();
+		obj.school = $("#sh").val();
+		obj.standard = $("#std").val();
+		obj.rollNumber = $("#rn").val();
+		var st = JSON.stringify(obj);
+		$.ajax({
+			url: 'api/student/post',
+			type: 'post',
+			data: st,
+			contentType: 'application/json', 
+			cache: false, 
+			datatype: 'text/html', 
+			success: function(data) {
+				$("#dis").html(data);
+			}, 
+			error: function(data) {
+				console.log("無法送出");
+			}
+		});
+	}
+	function start() {
+		$("#send").click(send);
+		$("#query").click(query);
+	}
+	$(document).ready(start);
+</script>
+</body>
+</html>

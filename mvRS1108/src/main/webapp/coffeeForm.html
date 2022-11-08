@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Coffee Form to REST</title>
+<script src="js/jquery3.6.0.js"></script>
+</head>
+<body>
+	咖啡名稱: <input type="text" id="coffee" value="Extra Espresso" /><br>
+	售價: <input type="text" id="sale" value="200" /><br>
+	數量: <input type="text" id="total" value="10" /><br>
+	供應商: <input type="text" id="supplier" value="150" /><br>
+	價錢: <input type="text" id="price" value="300" /><br>
+	<button id="add">Add</button>
+	<button id="search">Search</button>
+	<div id="dis"></div>
+	<script>
+		function query() {
+			
+		}
+		function send() {
+			var obj = {};
+			obj.cofName = $("#coffee").val();
+			obj.supId = parseInt($("#supplier").val());
+			obj.price = parseFloat($("#price").val());
+			obj.sales = parseInt($("#sale").val());
+			obj.total = parseInt($("#total").val());
+			$.ajax({
+				url: 'api/coffee/post', 
+				type: 'post', 
+				data: JSON.stringify(obj), 
+				contentType: 'application/json', 
+				cache: false, 
+				datatype: 'text/html', 
+				success: function(data) {
+					$("#dis").html(data);
+				}, 
+				error: function(data) {
+					console.log('無法送出');
+				}
+			});
+		}
+		function start() {
+			$("#add").click(send);
+			$("#search").click(query);
+		}
+		$(document).ready(start);
+	</script>
+</body>
+</html>

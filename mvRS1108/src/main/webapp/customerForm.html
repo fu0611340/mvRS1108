@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>customer form</title>
+<script src="js/jquery3.6.0.js"></script>
+</head>
+<body>
+	<h2>Register as new customer</h2>
+
+	<form>
+		<h3>
+			Name <input type="text" id="name" /><br>
+			Address <input type="text" id="address" /><br>
+			Phone Number <input type="text" id="phone-number" /><br>
+			<input type="button" id="add" value="SEND" />
+			<input type="button" id="query" value="Query by ID" />
+			<input type="text" id="id" />
+		</h3>
+	</form>
+	<div id="dis"></div>
+	<script>
+		function result(data) {
+			alert("Customer ID: "+data)	
+		}
+		function display(data) {
+			var s = data.id + " | " + data.name + " | " + data.address + " | " + data.phoneNumber;
+			$("#dis").text(s);
+		}
+		function send() {
+			//路徑一開始不能用「/」
+			$.post("api/customers", {
+				"name": $("#name").val(), 
+				"address": $("#address").val(),
+				"phone-number": $("#phone-number").val()
+			}, result);
+		}
+		function query() {
+			//路徑一開始不能用「/」
+			$.get("api/customers/"+$("#id").val(), display);
+		}
+		function start() {
+			$("#add").click(send);
+			$("#query").click(query);
+		}
+		$(document).ready(start);
+	</script>
+</body>
+</html>
