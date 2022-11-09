@@ -11,12 +11,56 @@
 	數量: <input type="text" id="total" value="10" /><br>
 	供應商: <input type="text" id="supplier" value="150" /><br>
 	價錢: <input type="text" id="price" value="300" /><br>
-	<button id="add">Add</button>
-	<button id="search">Search</button>
+	<button id="add">ADD</button>
+	<button id="update">UPDATE</button>
+	<br>
+	<button id="query">QUERY</button>
+	<button id="remove">REMOVE</button>
 	<div id="dis"></div>
 	<script>
-		function query() {
-			
+		function remove() {
+			var obj = {};
+			obj.cofName = $("#coffee").val();
+			obj.supId = parseInt($("#supplier").val());
+			obj.price = parseFloat($("#price").val());
+			obj.sales = parseInt($("#sale").val());
+			obj.total = parseInt($("#total").val());
+			$.ajax({
+				url: 'api/coffee/delete', 
+				type: 'post', 
+				data: JSON.stringify(obj), 
+				contentType: 'application/json', 
+				cache: false, 
+				datatype: 'text/html', 
+				success: function(data) {
+					$("#dis").html(data);
+				}, 
+				error: function(data) {
+					$("#dis").html('無法送出');
+				}
+			});
+		}
+		function update() {
+			var obj = {};
+			obj.cofName = $("#coffee").val();
+			obj.supId = parseInt($("#supplier").val());
+			obj.price = parseFloat($("#price").val());
+			obj.sales = parseInt($("#sale").val());
+			obj.total = parseInt($("#total").val());
+			$.ajax({
+				url: 'api/coffee/update', 
+				type: 'post', 
+				data: JSON.stringify(obj), 
+				contentType: 'application/json', 
+				cache: false, 
+				datatype: 'text/html', 
+				success: function(data) {
+					$("#dis").html(data);
+				}, 
+				error: function(data) {
+					$("#dis").html('無法送出');
+				}
+			});
 		}
 		function send() {
 			var obj = {};
@@ -36,13 +80,14 @@
 					$("#dis").html(data);
 				}, 
 				error: function(data) {
-					console.log('無法送出');
+					$("#dis").html('無法送出');
 				}
 			});
 		}
 		function start() {
 			$("#add").click(send);
-			$("#search").click(query);
+			$("#update").click(update);
+			$("#remove").click(remove);
 		}
 		$(document).ready(start);
 	</script>
