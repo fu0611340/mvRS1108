@@ -3,16 +3,20 @@ package dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Coffee;
 
 public class CoffeeDao {
 	public static void main(String[] args) {
-		System.out.println(CoffeeDao.getConnection());
+		System.out.println(new CoffeeDao().getCoffee());
 	}
 
-	public static Connection getConnection() {
+	public Connection getConnection() {
 		Connection con = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -25,9 +29,41 @@ public class CoffeeDao {
 		return con;
 	}
 
+	public List<Coffee> getCoffee(){	
+		List<Coffee> l = new ArrayList<>();
+		String sql = "SELECT * FROM classicmodels.coffees";
+		Connection con = getConnection();
+		
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(sql);
+			while(rs.next()) {
+				Coffee c = new Coffee();
+				c.setCofName(rs.getString("cof_name"));
+				c.setSupId(rs.getInt("sup_id"));
+				c.setPrice(rs.getDouble("price"));
+				c.setSales(rs.getInt("sales"));
+				c.setTotal(rs.getInt("total"));
+				l.add(c);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return l;
+	}
+	
 	public int InsertCoffee(Coffee cf) throws SQLException {
 		int result = 0;
-		Connection con = CoffeeDao.getConnection();
+		Connection con = getConnection();
 		PreparedStatement insert = null;
 
 		String insertStatement = "insert into classicmodels.coffees(COF_NAME,SUP_ID,PRICE,SALES,TOTAL)"
@@ -124,7 +160,7 @@ public class CoffeeDao {
 	}
 	public int deleteCoffee(Coffee cf) {
 		int result = 0;
-		Connection con = CoffeeDao.getConnection();
+		Connection con = getConnection();
 		PreparedStatement st = null;
 		String sql = "DELETE FROM classicmodels.coffees WHERE cof_name = ?";
 		

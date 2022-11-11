@@ -1,6 +1,8 @@
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,6 +14,14 @@ import model.Coffee;
 @Path("/coffee")
 public class CoffeeRestService {
 
+	@GET
+	@Path("/get")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Coffee> getCoffee(){
+		List<Coffee> result = new CoffeeDao().getCoffee();
+		return result;
+	}
+	
 	@POST
 	@Path("/post")
 	@Consumes(MediaType.APPLICATION_JSON)

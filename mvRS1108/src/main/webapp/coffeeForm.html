@@ -13,11 +13,51 @@
 	價錢: <input type="text" id="price" value="300" /><br>
 	<button id="add">ADD</button>
 	<button id="update">UPDATE</button>
-	<br>
-	<button id="query">QUERY</button>
 	<button id="remove">REMOVE</button>
 	<div id="dis"></div>
+	<button id="query">QUERY</button>
+	<table border="1" style="width: 70%">
+		<thead>
+			<tr>
+				<th>Coffee Name</th>
+				<th>Supplier ID</th>
+				<th>Price</th>
+				<th>Sales</th>
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody id="tbody">
+		</tbody>
+	</table>
 	<script>
+		function query() {
+			$.ajax({
+				url: 'api/coffee/get', 
+				type: 'get', 
+				contentType: 'application/json', 
+				cache: false, 
+				datatype: 'text/html', 
+				success: function(data) {
+					$("#tbody").empty();
+					$.each(data, function(index, item) {
+						console.log(data);
+						console.log(index);
+						console.log(item);
+						var eachrow = "<tr>"
+									+ "<td>" + item.cofName + "</td>"
+									+ "<td>" + item.supId + "</td>"
+									+ "<td>" + item.price + "</td>"
+									+ "<td>" + item.sales + "</td>"
+									+ "<td>" + item.total + "</td>"
+									+ "</tr>";
+						$("#tbody").append(eachrow);
+					});
+				}, 
+				error: function(data) {
+					$("#dis").html('無法送出');
+				}
+			});
+		}
 		function remove() {
 			var obj = {};
 			obj.cofName = $("#coffee").val();
@@ -88,6 +128,7 @@
 			$("#add").click(send);
 			$("#update").click(update);
 			$("#remove").click(remove);
+			$("#query").click(query);
 		}
 		$(document).ready(start);
 	</script>

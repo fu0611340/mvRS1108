@@ -6,6 +6,15 @@ public class Coffee {
 	private double price;
 	private int sales;
 	private int total;
+	public Coffee() {}
+	public Coffee(String cofName, int supId, double price, int sales, int total) {
+		super();
+		this.cofName = cofName;
+		this.supId = supId;
+		this.price = price;
+		this.sales = sales;
+		this.total = total;
+	}
 	public String getCofName() {
 		return cofName;
 	}
